@@ -1,0 +1,26 @@
+[
+  {
+    "firstName": "Naruedon",
+    "lastName": "Mueangaudon",
+    "email": "lololdpdka@gmail.com",
+    "password": "hahapopokko",
+    "occupationCategory": "Computer",
+    "occupation": "Video Game Developer"
+  },
+  {
+    "firstName": "Sawant",
+    "lastName": "Dekappre",
+    "email": "SawatDe@gmail.com",
+    "password": "Dekapregra",
+    "occupationCategory": "Scientific",
+    "occupation": "Biomedical scientist"
+  },
+  {
+    "firstName": "Leon",
+    "lastName": "Johnnatan",
+    "email": "Leonjohn@gmail.com",
+    "password": "Leonsusleon",
+    "occupationCategory": "Healthcare",
+    "occupation": "Dentist"
+  }
+]
