@@ -14,6 +14,7 @@ function displayProducts(productList) {
             <p>${product.description}</p>
             <p><strong>Category:</strong> ${product.category}</p>
             <button onclick="addToCart(${product.id})">Add to Cart</button>
+            <button onclick="addToCart1(${JSON.stringify(product)})">Add to Cart1</button>
         `;
         container.appendChild(productCard);
     });
