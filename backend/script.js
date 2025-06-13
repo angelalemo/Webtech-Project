@@ -48,17 +48,6 @@ function addToCart(productId) {
     } else {
         cart.push({ ...product, quantity: 1 });
     }
-    if (product) {
-        cart.push(product);
-                const notification = document.getElementById("notification");
-        notification.textContent = `${product.name} has been added to the cart.`;
-        notification.style.display = "block";
-        setTimeout(() => {
-            notification.style.display = "none";
-        }, 3000); // ซ่อนข้อความหลัง 3 วินาที
-        } else {
-        alert("Product not found!");
-    }
 
     saveCartToFile();
     alert("Product added to cart!");
@@ -66,26 +55,31 @@ function addToCart(productId) {
 
 // แสดงสินค้าในตะกร้า
 function displayCart() {
-    const container = document.getElementById("cartContainer");
-    container.innerHTML = ""; // ล้างรายการเก่า
+    fetch("http://localhost:3000/cart")
+        .then(response => response.json())
+        .then(cartData => {
+            const container = document.getElementById("cartContainer");
+            container.innerHTML = ""; // ล้างข้อมูลเดิม
 
-    if (cart.length === 0) {
-        container.innerHTML = "<p>Your cart is empty.</p>";
-        return;
-    }
+            if (cartData.length === 0) {
+                container.innerHTML = "<p>Your cart is empty.</p>";
+                return;
+            }
 
-    cart.forEach(product => {
-        const productCard = document.createElement("div");
-        productCard.className = "product-card";
-        productCard.innerHTML = `
-            <h3>${product.name}</h3>
-            <p>${product.description}</p>
-            <p><strong>Category:</strong> ${product.category}</p>
-            <p><strong>Quantity:</strong> ${product.quantity}</p>
-            <button onclick="removeFromCart(${product.id})">Remove</button>
-        `;
-        container.appendChild(productCard);
-    });
+            cartData.forEach(product => {
+                const productCard = document.createElement("div");
+                productCard.className = "product-card";
+                productCard.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p><strong>Category:</strong> ${product.category}</p>
+                    <p><strong>Quantity:</strong> ${product.quantity}</p>
+                    <button onclick="removeFromCart(${product.id})">Remove</button>
+                `;
+                container.appendChild(productCard);
+            });
+        })
+        .catch(err => console.error("Error fetching cart data:", err));
 }
 
 // บันทึกข้อมูลตะกร้าไปยังไฟล์ JSON
@@ -108,14 +102,18 @@ function saveCartToFile() {
 }
 
 function removeFromCart(productId) {
-    const productIndex = cart.findIndex(p => p.id === productId);
-    if (productIndex !== -1) {
-        cart.splice(productIndex, 1);
-        alert("Product removed from the cart.");
-        displayCart(); // อัปเดตรายการตะกร้าหลังจากลบ
-    } else {
-        alert("Product not found in the cart.");
-    }
+    fetch(`http://localhost:3000/cart/${productId}`, {
+        method: "DELETE"
+    })
+        .then(response => {
+            if (response.ok) {
+                alert("Product removed successfully!");
+                displayCart(); // อัปเดตตะกร้าหลังลบสินค้า
+            } else {
+                alert("Error removing product.");
+            }
+        })
+        .catch(err => console.error("Error:", err));
 }
 
 // โหลดสินค้าเมื่อเปิดหน้าเว็บ
